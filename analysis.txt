@@ -1,0 +1,52 @@
+HEALTH CHECK ANALYSIS
+
+A simple web service that monitors 3 endpoints from 2 servers and exposes their health status
+via a /health endpoint.
+
+METRICS MONITORED
+
+1. Status (UP/DOWN)
+   Immediate visibility into whether users can access the service.
+
+2. Response Time 
+  this matters because it serves as an early warning system. Slow responses often indicate 
+issues that could lead to complete failure.
+
+3. HTTP Status Code
+   shows diagnostic information. Different codes (404, 500, 503 etc) 
+   point to different types of problems and  require different fixes.
+
+4. Error Details
+   it shows specific troubleshooting information. "Connection failed" ,
+   "Timeout" which can tell engineers exactly what and where  to investigate.
+
+5. Overall System Health
+Shows whether we have partial or complete system
+
+What Happens when one service goes down
+- Detection within 5 seconds (service timeout)
+- /health endpoint immediately reflects the failure
+- Specific error message shows what went wrong
+- Overall status changes from "healthy" to "degraded"
+- Engineers can see exactly which service failed and why
+
+How to detect in production;
+
+Monitor setup:
+- Configure monitoring tools to call /health every 30 seconds
+- Watch for changes in overall_status from "healthy"
+- Track response time trends for early warnings
+
+Alert Syestem configuration:
+- Immediate alerts when overall_status becomes "degraded" or "down"
+- Warning alerts when response times exceed thresholds
+- Notifications for any individual endpoint status changes
+
+A possible response workflow for the health system checker:
+
+1. Monitoring systems detects failure 
+2. An alert sent to an engineer 
+3. Engineer checks /health for specific failure details
+4. The team investigates and fixes the issue
+5. After Fixing checks if status returns to "healthy"
+
